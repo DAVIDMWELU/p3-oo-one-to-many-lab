@@ -8,38 +8,34 @@ def test_owner_init():
 
 def test_pet_init():
     """Test Pet class initialization"""
-    pet = Pet("Fido", "dog")
+    owner = Owner("Jim")  # Define owner before using
+    pet = Pet("Fido", "dog", owner)
     assert pet.name == "Fido"
     assert pet.pet_type == "dog"
-
-    owner = Owner("Jim")
-    pet = Pet("Clifford", "dog", owner)
     assert pet.owner == owner
-
     Pet.all = []
 
 def test_has_pet_types():
     """Test Pet class has variable PET_TYPES"""
     assert Pet.PET_TYPES == ['dog', 'cat', 'rodent', 'bird', 'reptile', 'exotic']
-
     Pet.all = []
 
 def test_checks_pet_type():
     """Test Pet class validates pet_type"""
+    owner = Owner("Test")
     with pytest.raises(Exception):
-        Pet("Jim Jr.", "panda")
-
+        Pet("Jim Jr.", "panda", owner)
     Pet.all = []
 
 def test_pet_has_all():
     """Test Pet class has variable all, storing all instances of Pet"""
-    pet1 = Pet("Whiskers", "cat")
-    pet2 = Pet("Jerry", "reptile")
+    owner = Owner("Mary")
+    pet1 = Pet("Whiskers", "cat", owner)
+    pet2 = Pet("Jerry", "reptile", owner)
 
     assert pet1 in Pet.all
     assert pet2 in Pet.all
     assert len(Pet.all) == 2
-
     Pet.all = []
 
 def test_owner_has_pets():
@@ -49,18 +45,15 @@ def test_owner_has_pets():
     pet2 = Pet("Clifford", "dog", owner)
 
     assert owner.pets() == [pet1, pet2]
-
     Pet.all = []
 
 def test_owner_adds_pets():
     """Test Owner class has method add_pet(), validating and adding a pet"""
     owner = Owner("Ben")
-    pet = Pet("Whiskers", "cat")
-    owner.add_pet(pet)
+    pet = Pet("Whiskers", "cat", owner)
 
     assert pet.owner == owner
     assert owner.pets() == [pet]
-
     Pet.all = []
 
 def test_add_pet_checks_isinstance():
@@ -68,7 +61,6 @@ def test_add_pet_checks_isinstance():
     owner = Owner("Jim")
     with pytest.raises(Exception):
         owner.add_pet("Lucky")
-
     Pet.all = []
 
 def test_get_sorted_pets():
@@ -80,3 +72,4 @@ def test_get_sorted_pets():
     pet4 = Pet("Jerry", "reptile", owner)
     
     assert owner.get_sorted_pets() == [pet2, pet1, pet4, pet3]
+    Pet.all = []
